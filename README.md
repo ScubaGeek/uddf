@@ -25,7 +25,7 @@ Or install it yourself as:
 
 ## Usage
 
-This gem provides a Hash#to_uddf method which will return a UDDF encoded XML data object.
+This gem provides a `Hash#to_uddf` method which will return a UDDF encoded XML data object.
 
 The origin must be a Hash with the proper data structure to populate UDDF, but the code will do it's best to match keys
 with the appropriate elements when possible.
