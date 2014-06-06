@@ -5,11 +5,11 @@ require 'to_uddf/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "to_UDDF"
-  spec.version       = ToUDDF::VERSION
+  spec.version       = UDDF::VERSION
   spec.authors       = ["Donovan C. Young"]
   spec.email         = ["dyoung522@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{Provides a Hash#to_uddf method to convert Hash into UDDF XML}
+  spec.description   = %q{}
   spec.homepage      = ""
   spec.license       = "MIT"
 
