@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in to_uddf.gemspec
+# Specify your gem's dependencies in uddf.gemspec
 gemspec
 
 group :test, :development do
