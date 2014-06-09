@@ -1,5 +1,6 @@
-require 'uddf/xml.rb'
-require 'uddf/document.rb'
+require 'uddf/xml'
+require 'uddf/document'
+require 'uddf/versions'
 
 class Hash
   include UDDF::XML
