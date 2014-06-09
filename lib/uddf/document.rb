@@ -11,11 +11,5 @@ module UDDF
       Nokogiri::XML::Document.new
     end
   end
-
-  module XML
-    def to_uddf
-      return UDDF::Document.to_xml
-    end
-  end
 end
 

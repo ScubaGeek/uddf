@@ -1,3 +1,4 @@
+require 'uddf/xml.rb'
 require 'uddf/document.rb'
 
 class Hash
