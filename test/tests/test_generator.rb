@@ -16,10 +16,8 @@ module UDDF
                    %q{UDDF::Generator doesn't return ISO8601 time format}
     end
 
-    def test_generator_to_xml_returns_xml
-      assert_instance_of Nokogiri::XML::DocumentFragment, Generator.new.to_xml,
-                         %q{UDDF::Generator#to_xml doesn't return an xml fragment}
+    def test_generator_version
+      assert_equal VERSION, Generator.new.version
     end
-
   end
 end
