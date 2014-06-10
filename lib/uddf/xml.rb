@@ -2,26 +2,23 @@ require 'nokogiri'
 
 module UDDF
   module XML
-    def self.new
+    def self.new(doc)
       Nokogiri::XML::Document.parse(
-        Nokogiri::XML::Builder.new( encoding: 'UTF-8' ) do
-          uddf(version: Document::VERSION) { yield }
-        end.to_xml
+          Nokogiri::XML::Builder.new( encoding: 'UTF-8' ) do |xml|
+            xml.uddf(version: self.version) {
+              xml.generator {
+                xml.name     doc.generator.name
+                xml.type     doc.generator.type
+                xml.version  doc.generator.version
+                xml.datetime doc.generator.datetime
+              }
+            }
+          end.to_xml
       )
     end
 
     def self.version
       Document::VERSION
-    end
-
-    def self.null_fragment
-      Nokogiri::XML::DocumentFragment.parse('')
-    end
-
-    def self.generate_fragment
-      Nokogiri::XML::DocumentFragment.parse(
-        Nokogiri::XML::Builder.with(self.null_fragment) { yield }
-      )
     end
 
   end
