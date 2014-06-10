@@ -1,8 +1,9 @@
-require 'uddf/xml'
-require 'uddf/document'
 require 'uddf/versions'
+require 'uddf/generator'
+require 'uddf/xml'
 
-class Hash
-  include UDDF::XML
+module UDDF
+  def self.version
+    UDDF::Document::VERSION
+  end
 end
-
