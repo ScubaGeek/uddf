@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ScubaGeek/uddf.svg?branch=master)](https://travis-ci.org/ScubaGeek/uddf)
+
 # UDDF
 
 The Universal Dive Data Format (UDDF) is the successor of the Universal Dive Computer Format (UDCF) and is designed to
@@ -5,7 +7,7 @@ manage all dive data — planning, logging, analysing of scuba dives (apnoe, reb
 breathing gases), logbook, calculation of dive tables, archiving etc. — regardless of manufacturer, and independent of
 the operating system respectively, and to provide its interchangeabilty.
 
-The purpose of this gem is to provide an open-sourced universal UDDF conversion library for Ruby.
+The intent of this gem is to provide an open-sourced universal ruby library to read/write UDDF files.
 
 Please see http://www.streit.cc/extern/uddf_v321/en/index.html for more information regarding the UDDF standard.
 
@@ -25,13 +27,18 @@ Or install it yourself as:
 
 ## Usage
 
-This gem provides a `Hash#uddf` method which will return a UDDF encoded XML data object.
+```ruby
+require 'uddf'
 
-The origin must be a Hash with the proper data structure to populate UDDF, but the code will do it's best to match keys
-with the appropriate elements when possible.
+my_uddf = UDDF.new
+my_uddf.diver.name = 'Donovan Young'
 
-to use, one must only require 'uddf'
-
+if my_uddf.valid?
+  my_uddf.write
+else
+  puts "couldn't build UDDF file: #{my_uddf.errors}"
+end
+```
 
 ## Contributing
 
