@@ -1,20 +1,9 @@
-require 'nokogiri'
+require 'ox'
 
 module UDDF
   module XML
     def self.new(doc)
-      Nokogiri::XML::Document.parse(
-          Nokogiri::XML::Builder.new( encoding: 'UTF-8' ) do |xml|
-            xml.uddf(version: self.version) {
-              xml.generator {
-                xml.name     doc.generator.name
-                xml.type     doc.generator.type
-                xml.version  doc.generator.version
-                xml.datetime doc.generator.datetime
-              }
-            }
-          end.to_xml
-      )
+      Ox::Document.new(:version => '1.0', encoding: 'UTF-8')
     end
 
     def self.version
