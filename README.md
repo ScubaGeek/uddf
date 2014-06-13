@@ -1,5 +1,6 @@
-[![Build Status](https://travis-ci.org/ScubaGeek/uddf.svg?branch=master)](https://travis-ci.org/ScubaGeek/uddf)
+***PLEASE NOTE THIS CODE IS IN ACTIVE DEVELOPMENT AND NOT YET READY FOR PRODUCTION***
 
+[![Build Status](https://travis-ci.org/ScubaGeek/uddf.svg?branch=master)](https://travis-ci.org/ScubaGeek/uddf)
 # UDDF
 
 The Universal Dive Data Format (UDDF) is the successor of the Universal Dive Computer Format (UDCF) and is designed to
