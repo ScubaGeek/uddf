@@ -8,7 +8,7 @@ module UDDF
     end
 
     def test_document_output
-      assert_match /^<\?xml version=\"1.0\".*<generator>.*<\/generator>.*<\/uddf>$/m, Document.new.to_uddf
+      assert_match /^<uddf version=\"#{Document::VERSION}\">.*<generator>.*<\/generator>.*<\/uddf>$/m, Document.new.to_uddf
     end
 
   end
