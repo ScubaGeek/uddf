@@ -1,19 +1,24 @@
 module UDDF
   class Document
     def initialize(args = {})
-      @doc = Ox::Document.new(:version => '1.0', encoding: 'UTF-8')
-      @generator = Generator.new
+      @root = Ox::Element.new(:uddf)
+      @root[:version] = VERSION
+      @root << Generator.new.to_elem
+      @doc = Ox::Document.new(:version => '1.0', encoding: 'UTF-8') << @root
     end
-    attr_reader :generator
+    attr_reader :doc, :root
 
     def to_uddf
-      top = Ox::Element.new(:uddf)
-      top[:version] = VERSION
-      top << @generator.to_elem
-      @doc << top
-      Ox.dump(@doc)
+      Ox.dump(@root)
     end
-    alias_method :to_xml, :to_uddf
+
+    def to_xml
+      Ox.dump(@doc, with_xml: true)
+    end
+
+    def to_s
+      Ox.dump(self.doc)
+    end
   end
 end
 

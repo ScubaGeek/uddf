@@ -11,13 +11,7 @@ module UDDF
     attr_reader :name, :type, :version, :datetime
 
     def to_elem
-      doc = Ox::Element.new('generator')
-      [:name, :type, :version, :datetime].each do |key|
-        elem = Ox::Element.new(key)
-        elem << self.send(key)
-        doc << elem
-      end
-      doc
+      XML.to_elem(self, [:name, :type, :version, :datetime])
     end
   end
 end

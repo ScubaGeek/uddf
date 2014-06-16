@@ -10,5 +10,14 @@ module UDDF
       Document::VERSION
     end
 
+
+    def self.to_elem(klass, nodes)
+      doc = Ox::Element.new(klass.class.name.split('::')[-1].downcase)
+      nodes.each do |node|
+        raise ArgumentError, "#{klass.class} does not respond to #{node}" unless klass.respond_to?(node)
+        doc << ( Ox::Element.new(node) << klass.send(node) )
+      end
+      return doc
+    end
   end
 end
