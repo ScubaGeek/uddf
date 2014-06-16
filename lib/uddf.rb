@@ -1,6 +1,7 @@
 require 'uddf/versions'
-require 'uddf/generator'
 require 'uddf/document'
+require 'uddf/generator'
+require 'uddf/diver'
 require 'uddf/xml'
 
 module UDDF
