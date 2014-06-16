@@ -1,5 +1,27 @@
 require_relative '../test_helper'
 
+class XMLTest_valid
+  def initialize
+    @nodename = 'testing'
+  end
+  attr_reader :nodename
+
+  def nodes
+    { name: 'test'}
+  end
+end
+
+class XMLTest_invalid_nodes < XMLTest_valid
+  def nodes
+    'test'
+  end
+end
+
+class XMLTest_invalid_nodename < XMLTest_valid
+  def initialize
+  end
+end
+
 module UDDF
 
   class TestXML < Minitest::Test
@@ -9,16 +31,28 @@ module UDDF
       assert_equal Document::VERSION, XML.version, %q{UDDF::XML#version does not produce valid version}
     end
 
-    def test_invalid_to_elem
-      assert_raises ArgumentError do
-        UDDF::XML.to_elem(String, [:bogus_method])
+    def test_xml_raises_argument_error_on_missing_methods
+      assert_raises ArgumentError, %q{XML#to_elem doesn't raise ArguementError when klass doesn't respond to nodes or nodename} do
+        UDDF::XML.to_elem(String)
+      end
+    end
+
+    def test_xml_raises_runtime_error_for_invalid_nodes
+      assert_raises RuntimeError, %q{Invalid nodes does not raise RuntimeError when nodes doesn't return Hash} do
+        XML.to_elem(XMLTest_invalid_nodes.new)
+      end
+    end
+
+    def test_xml_raises_argument_error_for_invalid_nodename
+      assert_raises ArgumentError, %q{Invalid nodes does not raise ArgumentError when nodename doesn't exist} do
+        XML.to_elem(XMLTest_invalid_nodename.new)
       end
     end
 
     def test_xml_to_elem
-      doc = UDDF::XML.to_elem(String, [:name])
+      doc = XML.to_elem(XMLTest_valid.new)
       assert_instance_of Ox::Element, doc
-      assert_match /^<class>\n\s*<name>.*<\/name>\n\s*<\/class>$/m, Ox.dump(doc)
+      assert_match /^<testing>\n\s*<name>test<\/name>\n\s*<\/testing>/, Ox.dump(doc)
     end
 
   end

@@ -4,15 +4,16 @@ module UDDF
   class TestGenerator < Minitest::Test
 
     def test_generator_responds_to_methods
-      assert_respond_to Generator.new, :name, 'UDDF::Generator does not respond to #name'
-      assert_respond_to Generator.new, :type, 'UDDF::Generator does not respond to #type'
-      assert_respond_to Generator.new, :version, 'UDDF::Generator does not respond to #version'
-      assert_respond_to Generator.new, :datetime, 'UDDF::Generator does not respond to #datetime'
+      gen = Generator.new
+
+      assert_respond_to gen, :nodename, 'UDDF::Generator does not respond to #nodename'
+      assert_respond_to gen, :nodes,    'UDDF::Generator does not respond to #nodes'
+      assert_instance_of Hash, gen.nodes,     'UDDF::Generator#nodes is not a Hash'
     end
 
     def test_datetime_is_iso8601_format
       # 2014-06-09T20:39:34-04:00"
-      assert_match /\-\d{2}T\d+:/, Generator.new.datetime,
+      assert_match /\-\d{2}T\d+:/, Generator.new.nodes[:datetime],
                    %q{UDDF::Generator doesn't return ISO8601 time format}
     end
 
@@ -23,8 +24,5 @@ module UDDF
       assert_equal VERSION, doc.version.text
     end
 
-    def test_generator_version
-      assert_equal VERSION, Generator.new.version
-    end
   end
 end

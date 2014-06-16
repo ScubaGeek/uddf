@@ -11,12 +11,18 @@ module UDDF
     end
 
 
-    def self.to_elem(klass, nodes)
-      doc = Ox::Element.new(klass.class.name.split('::')[-1].downcase)
-      nodes.each do |node|
-        raise ArgumentError, "#{klass.class} does not respond to #{node}" unless klass.respond_to?(node)
-        doc << ( Ox::Element.new(node) << klass.send(node) )
+    def self.to_elem(klass)
+      raise ArgumentError, "Class #{klass.class} Must respond to #nodename and #nodes" unless klass.respond_to?(:nodename, :nodes)
+      raise ArgumentError, "Class #{klass.class}#nodename may not be nil" if klass.nodename.nil?
+
+      raise RuntimeError, "Class #{klass.class}#nodes does not return a hash" unless klass.nodes.is_a?(Hash)
+
+      doc = Ox::Element.new(klass.nodename)
+
+      klass.nodes.each do |node, value|
+        doc << ( Ox::Element.new(node) << value )
       end
+
       return doc
     end
   end
