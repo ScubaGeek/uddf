@@ -10,8 +10,10 @@ module UDDF
   # For inheritance
   class Base
     def initialize(args = {})
-      args.each do |key,value|
-        instance_variable_set("@#{key}", value)
+      if args.is_a?(Hash)
+        args.each do |key,value|
+          instance_variable_set("@#{key.to_s}", value.to_s)
+        end
       end
     end
 
