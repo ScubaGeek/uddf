@@ -19,12 +19,8 @@ class TestBase < Minitest::Test
     @t = UDDF::Base.new(foo: 'bar')
   end
 
-  def test_convert_to_iv_class_method
-    assert_equal '@foobar'.to_sym, UDDF::Base.convert_to_iv('foobar')
-  end
-
-  def test_convert_from_iv_class_method
-    assert_equal :foobar, UDDF::Base.convert_from_iv('@foobar'.to_sym).to_sym
+  def test_mkkey_class_method
+    assert_equal :foo_bar_baz, UDDF::Base.mkkey('   foo Bar  BAZ ')
   end
 
   def test_nodes
@@ -68,6 +64,43 @@ class TestBase < Minitest::Test
     assert_equal 'baz', @t.boo
   end
 
+  def test_required_node
+    @t.set_node(:test, 'required', true)
+    assert @t.required?(:test), %q{#required? should return true}
+  end
+
+  def test_set_required_array
+    @t.set_required(:one, :two)
+    assert @t.required?(:one), %q{one should be required}
+    assert @t.required?(:two), %q{two should be required}
+  end
+
+  def test_retrieve_required_array
+    my_array = [:foo, :bar, :baz]
+    @t.set_required my_array, :bar
+    assert_equal my_array, @t.required
+  end
+
+  def test_error_on_delete_required
+    @t.set_node(:required, 'required', true)
+    assert_raises StandardError do
+      @t.delete_node(:required)
+    end
+  end
+
+  def test_set_required_method
+    refute @t.required?(:must_have), %q{whoope, must_have is already required, test control failure}
+    @t.set_required(:must_have)
+    assert @t.required?(:must_have), %q{must_have should be required}
+  end
+
+  def test_not_required_method
+    @t.add_node(:not_required, nil, true)
+    assert @t.required?(:not_required), %q{not_required should be required}
+    @t.not_required(:not_required)
+    refute @t.required?(:not_required), %q{not_required should no longer be required}
+  end
+
   def test_add_node_with_space
     @t.add_node('Space Test')
     assert @t.nodes.has_key?(:space_test)
@@ -99,11 +132,6 @@ class TestBase < Minitest::Test
   def test_nodename
     assert_respond_to @t, :nodename
     assert_equal 'base', @t.nodename
-  end
-
-  def test_instance_variables
-    assert_equal [:@foo], @t.instance_variables
-    assert_equal 'bar', @t.instance_variable_get(:@foo)
   end
 
   def test_instance_variable_getter
