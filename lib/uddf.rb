@@ -12,7 +12,7 @@ module UDDF
     def initialize(args = {})
       if args.is_a?(Hash)
         args.each do |key,value|
-          instance_variable_set("@#{key.to_s}", value.to_s)
+          add_node(key, value)
         end
       end
     end
@@ -22,12 +22,23 @@ module UDDF
     end
 
     def nodes
-      node_arr = Hash.new
-      instance_variables.each do |var|
-        node_arr[var.to_s.gsub(/^@/, '').to_sym] = instance_variable_get(var)
-      end
-      return node_arr
+      node_array ||= Hash.new
+      instance_variables.each { |iv| node_array[Base.convert_from_iv(iv)] = instance_variable_get(iv) }
+      return node_array
     end
+
+    def has_node?(var)
+      nodes.has_key?(var.to_sym)
+    end
+
+    def add_node(var, value = true)
+      instance_variable_set(Base.convert_to_iv(var), value.to_s)
+    end
+
+    def delete_node(var)
+      remove_instance_variable(Base.convert_to_iv(var))
+    end
+    alias_method :del_node, :delete_node
 
     def to_elem
       XML.to_elem(self)
@@ -37,9 +48,9 @@ module UDDF
       return super unless nodes.is_a?(Hash)
 
       /^(?<meth>\w*)(?<oper>\W*)$/ =~ method
-      meth_sym = "@#{meth}".to_sym
+      meth_sym = Base.convert_to_iv(meth)
 
-      if nodes.has_key?(meth.to_sym)
+      if has_node?(meth)
         case oper
           when ''  then instance_variable_get(meth_sym)
           when '=' then instance_variable_set(meth_sym, *args)
@@ -52,10 +63,19 @@ module UDDF
 
     def respond_to?(method, include_private = false)
       return super unless nodes.is_a?(Hash)
-      return true if nodes.has_key?(method.to_s.gsub(/\W*$/, '').to_sym)
+      return true if has_node?(method.to_s.gsub(/\W*$/, ''))
       super
     end
 
+    private
+
+      def self.convert_to_iv(var)
+        "@#{var.to_s}".to_sym
+      end
+
+      def self.convert_from_iv(var)
+        var.to_s.gsub(/^@/, '').to_sym
+      end
   end
 end
 

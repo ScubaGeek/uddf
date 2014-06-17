@@ -19,10 +19,51 @@ class TestBase < Minitest::Test
     @t = UDDF::Base.new(foo: 'bar')
   end
 
+  def test_convert_to_iv_class_method
+    assert_equal '@foobar'.to_sym, UDDF::Base.convert_to_iv('foobar')
+  end
+
+  def test_convert_from_iv_class_method
+    assert_equal :foobar, UDDF::Base.convert_from_iv('@foobar'.to_sym).to_sym
+  end
+
   def test_nodes
     assert_respond_to @t, :nodes
     assert_instance_of Hash, @t.nodes
     assert_equal @t.nodes, { :foo => 'bar' }
+  end
+
+  def test_add_node
+    # Validate the node no longer exists
+    refute @t.nodes.has_key?(:test), %q{whoops, node 'boo' already exists, test control failure}
+
+    @t.add_node(:boo, 'baz')
+
+    assert @t.nodes.has_key?(:boo), %q{#add_node does not add node}
+    assert_equal 'baz', @t.boo
+  end
+
+  def test_delete_node
+    # Validate the node does exist
+    assert @t.nodes.has_key?(:foo), %q{whoops, node 'foo' already doesn't exist, test control failure}
+
+    @t.delete_node(:foo)
+
+    # Validate the node no longer exists
+    refute @t.nodes.has_key?(:foo), %q{#delete_node does not delete node}
+    refute_respond_to @t, :foo
+  end
+
+  def test_add_node_defaults
+    @t.add_node('should_be_true')
+    assert @t.nodes.has_key?(:should_be_true), %q{#add_node does not add node}
+    assert @t.should_be_true, %q{#add_node doesn't default to 'true'}
+  end
+
+  def test_has_node?
+    assert_respond_to @t, :has_node?
+    assert @t.has_node?(:foo)
+    refute @t.has_node?(:bar)
   end
 
   def test_nodename
