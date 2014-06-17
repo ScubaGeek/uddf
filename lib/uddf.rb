@@ -10,11 +10,7 @@ module UDDF
   # For inheritance
   class Base
     def initialize(args = {})
-      if args.is_a?(Hash)
-        args.each do |key,value|
-          add_node(key, value)
-        end
-      end
+      args.each { |key,value| add_node(key, value) } if args.is_a?(Hash)
     end
 
     def nodename
@@ -29,6 +25,12 @@ module UDDF
 
     def has_node?(var)
       nodes.has_key?(var.to_sym)
+    end
+
+    def add_nodes(args)
+      args.each { |k,v| add_node(k,v) } if args.is_a?(Hash)
+      args.each { |v|   add_node(v)   } if args.is_a?(Array)
+      add_node(args)                    if args.is_a?(String)
     end
 
     def add_node(var, value = true)
@@ -70,7 +72,8 @@ module UDDF
     private
 
       def self.convert_to_iv(var)
-        "@#{var.to_s}".to_sym
+        # Remove leading and trailing spaces, then convert remaining spaces to '_'
+        "@#{var.to_s.downcase.gsub(/^\s+/, '').gsub(/\s+$/,'').gsub(/\s+/, '_')}".to_sym
       end
 
       def self.convert_from_iv(var)

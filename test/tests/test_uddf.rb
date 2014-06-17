@@ -33,6 +33,31 @@ class TestBase < Minitest::Test
     assert_equal @t.nodes, { :foo => 'bar' }
   end
 
+  def test_add_nodes_with_hash
+    @t.add_nodes({beep: 'one', bop: 'two'})
+
+    assert_respond_to @t, :beep
+    assert_equal 'one', @t.beep, %q{beep should be 'one'}
+    assert_respond_to @t, :bop
+    assert_equal 'two', @t.bop, %q{bop should be 'two'}
+  end
+
+  def test_add_nodes_with_array
+    @t.add_nodes(%w(uno dos))
+
+    assert_respond_to @t, :uno
+    assert @t.uno, %q{uno should be 'true'}
+    assert_respond_to @t, :dos
+    assert @t.dos, %q{dos should be 'true'}
+  end
+
+  def test_add_nodes_with_string
+    @t.add_nodes('string test')
+
+    assert_respond_to @t, :string_test
+    assert @t.string_test, %q{string_test should be 'true'}
+  end
+
   def test_add_node
     # Validate the node no longer exists
     refute @t.nodes.has_key?(:test), %q{whoops, node 'boo' already exists, test control failure}
@@ -41,6 +66,11 @@ class TestBase < Minitest::Test
 
     assert @t.nodes.has_key?(:boo), %q{#add_node does not add node}
     assert_equal 'baz', @t.boo
+  end
+
+  def test_add_node_with_space
+    @t.add_node('Space Test')
+    assert @t.nodes.has_key?(:space_test)
   end
 
   def test_delete_node
