@@ -85,6 +85,5 @@ end
 require 'uddf/versions'
 require 'uddf/document'
 require 'uddf/xml'
-require 'uddf/generator'
 require 'uddf/diver'
 
