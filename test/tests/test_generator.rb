@@ -17,11 +17,14 @@ module UDDF
                    %q{UDDF::Generator doesn't return ISO8601 time format}
     end
 
+    def test_generator_nodes
+      assert_equal [ :name, :type, :version, :datetime ], Generator.new.nodes.keys
+    end
+
     def test_to_elem
-      doc = Generator.new.to_elem
-      assert_instance_of Ox::Element, doc
-      assert doc.nodes.map(&:value).include?('version'), %q{#to_elem does not include a version element}
-      assert_equal VERSION, doc.version.text
+      doc = Generator.new
+      assert_respond_to doc, :to_elem, %q{UDDF::Generator#to_elem is not valid}
+      assert_instance_of Ox::Element, doc.to_elem
     end
 
   end
