@@ -64,8 +64,14 @@ class TestBase < Minitest::Test
     assert_equal 'baz', @t.boo
   end
 
+  def test_add_node_with_invalid_opts
+    assert_raises ArgumentError do
+      @t.add_node(:baz, nil, nil)
+    end
+  end
+
   def test_required_node
-    @t.set_node(:test, 'required', true)
+    @t.set_node(:test, 'required', require: true)
     assert @t.required?(:test), %q{#required? should return true}
   end
 
@@ -82,7 +88,7 @@ class TestBase < Minitest::Test
   end
 
   def test_error_on_delete_required
-    @t.set_node(:required, 'required', true)
+    @t.set_node(:required, 'required', require: true)
     assert_raises StandardError do
       @t.delete_node(:required)
     end
@@ -95,7 +101,7 @@ class TestBase < Minitest::Test
   end
 
   def test_not_required_method
-    @t.add_node(:not_required, nil, true)
+    @t.add_node(:not_required, nil, require: true)
     assert @t.required?(:not_required), %q{not_required should be required}
     @t.not_required(:not_required)
     refute @t.required?(:not_required), %q{not_required should no longer be required}

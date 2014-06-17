@@ -42,8 +42,12 @@ module UDDF
       @nodes[Base.mkkey(var)] if has_node?(var)
     end
 
-    def set_node(var, value = true, require = false)
-      set_required(var) if require
+    def set_node(var, value = true, opts = {})
+      raise ArgumentError unless opts.is_a?(Hash)
+
+      opts.merge(Base.node_defaults)
+
+      set_required(var) if opts[:require]
       @nodes[Base.mkkey(var)] = value
     end
     alias_method :add_node, :set_node
@@ -111,6 +115,11 @@ module UDDF
         var.to_s.downcase.gsub(/^\s+/,'').gsub(/\s+$/,'').gsub(/\s+/, '_').to_sym
       end
 
+      def self.node_defaults
+        {
+            require: false,
+        }
+      end
   end
 end
 
