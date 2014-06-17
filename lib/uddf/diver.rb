@@ -1,13 +1,8 @@
 module UDDF
-  class Diver
-
-    def initialize(args = {})
-      @firstname
-      @middlename
-      @lastname
-    end
+  class Diver < Base
 
     def valid?
+      true
     end
 
   end
