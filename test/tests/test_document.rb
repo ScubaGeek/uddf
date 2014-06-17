@@ -29,6 +29,10 @@ module UDDF
       @gen = Generator.new( name: 'UDDF Ruby Gem', type: 'RubyGem', version:  VERSION, datetime: Time.now.iso8601 )
     end
 
+    def test_valid
+      assert @gen.valid?, %q{Generator does not produce a valid instance}
+    end
+
     def test_datetime_is_iso8601_format
       # 2014-06-09T20:39:34-04:00"
       assert_match /\-\d{2}T\d+:/, @gen.nodes[:datetime], %q{UDDF::Generator doesn't return ISO8601 time format}

@@ -9,11 +9,17 @@ module UDDF
 
   # For inheritance
   class Base
-    def initialize(args = {})
+    def initialize(*args)
       @nodes = {}
       @required = []
 
-      args.each { |key,value| set_node(key, value) } if args.is_a?(Hash)
+      args.each do |arg|
+        if arg.is_a?(Hash) or arg.is_a?(Array)
+          arg.each { |k,v| set_node(k, v) }
+        else
+          set_nodes(arg)
+        end
+      end
     end
     attr_reader :nodes, :required
 
@@ -64,6 +70,17 @@ module UDDF
 
     def to_elem
       XML.to_elem(self)
+    end
+
+    def valid?
+      return true if @required.empty?
+
+      @required.each do |node|
+        return false unless has_node?(node)
+        return false if get_node(node).nil?
+      end
+
+      true
     end
 
     def method_missing(method, *args, &block)

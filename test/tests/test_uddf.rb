@@ -150,5 +150,26 @@ class TestBase < Minitest::Test
       @t.baz
     end
   end
+
+  def test_no_method_error_on_missing_node
+    assert_raises NoMethodError do
+      @t.bar
+    end
+  end
+
+  def test_not_valid_when_required_nil
+    @t.foo = nil
+    assert @t.valid?, %q{Instance should be valid}
+
+    @t.set_required(:foo)
+    refute @t.valid?, %q{Instance should not be valid}
+  end
+
+  def test_not_valid_when_required_missing
+    assert @t.valid?, %q{Instance should be valid}
+
+    @t.set_required(:baz)
+    refute @t.valid?, %q{Instance should not be valid}
+  end
 end
 

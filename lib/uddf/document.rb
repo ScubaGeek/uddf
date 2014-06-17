@@ -1,5 +1,10 @@
 module UDDF
-  class Generator < UDDF::Base; end
+  class Generator < UDDF::Base
+    def initialize(*args)
+      super
+      set_required(:name, :type, :version, :datetime)
+    end
+  end
 
   class Document
     def initialize(args = {})
