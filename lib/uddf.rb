@@ -127,4 +127,4 @@ require 'uddf/versions'
 require 'uddf/document'
 require 'uddf/xml'
 require 'uddf/diver'
-
+require 'uddf/classes'

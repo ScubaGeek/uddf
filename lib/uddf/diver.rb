@@ -1,8 +1,10 @@
 module UDDF
   class Diver < Base
 
-    def valid?
-      true
+    def initialize(*args)
+      super
+      set_required(:owner)
+      set_node(:owner, Person.new)
     end
 
   end
